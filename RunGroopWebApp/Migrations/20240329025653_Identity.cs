@@ -60,7 +60,7 @@ namespace RunGroopWebApp.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "Email",
+                name: "EmailAddress",
                 table: "AspNetUsers",
                 type: "nvarchar(256)",
                 maxLength: 256,
@@ -380,7 +380,7 @@ namespace RunGroopWebApp.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "Email",
+                name: "EmailAddress",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
