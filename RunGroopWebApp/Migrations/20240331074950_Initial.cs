@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RunGroopWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,20 +31,15 @@ namespace RunGroopWebApp.Migrations
                 name: "AppUser",
                 newName: "AspNetUsers");
 
+            migrationBuilder.RenameColumn(
+                name: "ReceCategory",
+                table: "Races",
+                newName: "RaceCategory");
+
             migrationBuilder.RenameIndex(
                 name: "IX_AppUser_AddressId",
                 table: "AspNetUsers",
                 newName: "IX_AspNetUsers_AddressId");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "AddressId",
-                table: "AspNetUsers",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "AccessFailedCount",
@@ -60,7 +55,7 @@ namespace RunGroopWebApp.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "EmailAddress",
+                name: "Email",
                 table: "AspNetUsers",
                 type: "nvarchar(256)",
                 maxLength: 256,
@@ -308,8 +303,7 @@ namespace RunGroopWebApp.Migrations
                 table: "AspNetUsers",
                 column: "AddressId",
                 principalTable: "Addresses",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Clubs_AspNetUsers_AppUserId",
@@ -380,7 +374,7 @@ namespace RunGroopWebApp.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "EmailAddress",
+                name: "Email",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -431,18 +425,15 @@ namespace RunGroopWebApp.Migrations
                 name: "AspNetUsers",
                 newName: "AppUser");
 
+            migrationBuilder.RenameColumn(
+                name: "RaceCategory",
+                table: "Races",
+                newName: "ReceCategory");
+
             migrationBuilder.RenameIndex(
                 name: "IX_AspNetUsers_AddressId",
                 table: "AppUser",
                 newName: "IX_AppUser_AddressId");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "AddressId",
-                table: "AppUser",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AppUser",
