@@ -177,7 +177,7 @@ namespace RunGroopWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("RunGroopWebApp.Models.AppUser", b =>
@@ -188,14 +188,14 @@ namespace RunGroopWebApp.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmailAddress")
+                    b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -291,7 +291,7 @@ namespace RunGroopWebApp.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Clubs");
+                    b.ToTable("Clubs", (string)null);
                 });
 
             modelBuilder.Entity("RunGroopWebApp.Models.Race", b =>
@@ -329,7 +329,7 @@ namespace RunGroopWebApp.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Races");
+                    b.ToTable("Races", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -387,9 +387,7 @@ namespace RunGroopWebApp.Migrations
                 {
                     b.HasOne("RunGroopWebApp.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
                 });
