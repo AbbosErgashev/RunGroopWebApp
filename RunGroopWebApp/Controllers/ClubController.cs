@@ -2,6 +2,7 @@
 using RunGroopWebApp.Interfaces;
 using RunGroopWebApp.Models;
 using RunGroopWebApp.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace RunGroopWebApp.Controllers
 {
@@ -9,10 +10,13 @@ namespace RunGroopWebApp.Controllers
     {
         private readonly IPhotoService _photoService;
         private readonly IClubRepository _clubRepository;
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _clubRepository = clubRepository;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
@@ -29,7 +33,9 @@ namespace RunGroopWebApp.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var createClubViewModel = new CreateClubViewModel { AppUserId =  curUserId };
+            return View(createClubViewModel);
         }
 
         [HttpPost]
@@ -44,6 +50,7 @@ namespace RunGroopWebApp.Controllers
                     Title = clubVM.Title,
                     Description = clubVM.Description,
                     Image = result.Url.ToString(),
+                    AppUserId = clubVM.AppUserId,
                     Address = new Address
                     {
                         Street = clubVM.Address.Street,
@@ -64,7 +71,7 @@ namespace RunGroopWebApp.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var club = await _clubRepository.GetByIdAsync(id);
-            if (club == null) return View("Error");
+            if (club is null) return View("Error");
             var clubVM = new EditClubViewModel
             {
                 Title = club.Title,
