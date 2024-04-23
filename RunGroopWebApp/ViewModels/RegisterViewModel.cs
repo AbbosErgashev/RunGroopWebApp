@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RunGroopWebApp.ViewModels
 {
@@ -8,9 +7,11 @@ namespace RunGroopWebApp.ViewModels
         [Display(Name = "Email address")]
         [Required(ErrorMessage = "Email address is required")]
         public string EmailAddress { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
         [Display(Name = "Confire password")]
         [Required(ErrorMessage = "Confirm password is required")]
         [DataType(DataType.Password)]
