@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.Json;
 using RunGroopWebApp.Data;
 using RunGroopWebApp.Models;
 using RunGroopWebApp.ViewModels;
-using System.ComponentModel.DataAnnotations;
 
 namespace RunGroopWebApp.Controllers
 {
@@ -36,7 +34,6 @@ namespace RunGroopWebApp.Controllers
 
             if (user is not null)
             {
-                //User is found, check password
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
                 if (passwordCheck)
                 {
@@ -46,11 +43,9 @@ namespace RunGroopWebApp.Controllers
                         return RedirectToAction("Index", "Race");
                     }
                 }
-                //Password is incorrect
                 TempData["Error"] = "Wrong creditials. Please try again";
                 return View(loginViewModel);
             }
-            //User not found
             TempData["Error"] = "Wrong creditials. Please try again";
             return View(loginViewModel);
         }
@@ -64,10 +59,11 @@ namespace RunGroopWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
-            if(!ModelState.IsValid) return View(registerViewModel);
+            if (!ModelState.IsValid)
+                return View(registerViewModel);
 
             var user = await _userManager.FindByEmailAsync(registerViewModel.EmailAddress);
-            if(user is not null)
+            if (user is not null)
             {
                 TempData["Error"] = "This email address is already in use";
                 return View(registerViewModel);
@@ -76,14 +72,17 @@ namespace RunGroopWebApp.Controllers
             var newUser = new AppUser()
             {
                 Email = registerViewModel.EmailAddress,
-                UserName = registerViewModel.EmailAddress
+                UserName = registerViewModel.EmailAddress,
+                PasswordHash = registerViewModel.Password
             };
             var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
 
-            if(newUserResponse.Succeeded)
+            if (newUserResponse.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newUser, UserRoles.User);
             }
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Home");
         }

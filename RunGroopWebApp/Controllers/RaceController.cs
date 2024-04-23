@@ -11,7 +11,10 @@ namespace RunGroopWebApp.Controllers
         private readonly IRaceRepository _raceRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public RaceController(IRaceRepository raceRepository,
+                                IPhotoService photoService,
+                                IHttpContextAccessor httpContextAccessor
+                             )
         {
             _photoService = photoService;
             _raceRepository = raceRepository;

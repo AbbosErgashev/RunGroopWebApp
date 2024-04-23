@@ -2,7 +2,6 @@
 using RunGroopWebApp.Interfaces;
 using RunGroopWebApp.Models;
 using RunGroopWebApp.ViewModels;
-using System.Runtime.CompilerServices;
 
 namespace RunGroopWebApp.Controllers
 {
@@ -12,7 +11,10 @@ namespace RunGroopWebApp.Controllers
         private readonly IClubRepository _clubRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public ClubController(IClubRepository clubRepository,
+                                IPhotoService photoService,
+                                IHttpContextAccessor httpContextAccessor
+                             )
         {
             _clubRepository = clubRepository;
             _photoService = photoService;
@@ -33,8 +35,8 @@ namespace RunGroopWebApp.Controllers
 
         public IActionResult Create()
         {
-            var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
-            var createClubViewModel = new CreateClubViewModel { AppUserId =  curUserId };
+            var curUserId = _httpContextAccessor?.HttpContext.User.GetUserId();
+            var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
             return View(createClubViewModel);
         }
 
@@ -127,6 +129,26 @@ namespace RunGroopWebApp.Controllers
             {
                 return View(clubVM);
             }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var clubDetails = await _clubRepository.GetByIdAsync(id);
+            if (clubDetails is null)
+                return View("Error");
+
+            return View(clubDetails);
+        }
+
+        [HttpPost, ActionName("DeleteClub")]
+        public async Task<IActionResult> DeleteClub(int id)
+        {
+            var clubDetails = await _clubRepository.GetByIdAsync(id);
+            if (clubDetails is null)
+                return View("Error");
+
+            _clubRepository.Delete(clubDetails);
+            return RedirectToAction("Index");
         }
     }
 }
